@@ -36,57 +36,109 @@ describe('My List API', () => {
     expect(userResponse.status).toBe(201);
   });
 
-  it('should add an item to the list', async () => {
-    const itemId = faker.string.uuid();
+  describe('Add Item to List', () => {
 
-    const response = await request(app)
-      .post('/api/mylist')
-      .send({ userId: userId, itemId: itemId, itemType: 'Movie' });
-    expect(response.status).toBe(201);
-    expect(response.body.message).toBe('Item added to list');
+    it('should add an item to the list', async () => {
+      const itemId = faker.string.uuid();
+  
+      const response = await request(app)
+        .post('/api/mylist')
+        .send({ userId: userId, itemId: itemId, itemType: 'Movie' });
+      expect(response.status).toBe(201);
+      expect(response.body.message).toBe('Item added to list');
+  
+      const user = await User.findOne({ id: userId });
+      expect (user).toBeDefined();
+      expect (user?.myList[0]?.itemId).toEqual(itemId);
+    });
 
-    const user = await User.findOne({ id: userId });
-    expect (user).toBeDefined();
-    expect (user?.myList[0]?.itemId).toEqual(itemId);
+    it('should return error if item already exists', async () => {
+      const itemId = faker.string.uuid();
+  
+      const response = await request(app)
+        .post('/api/mylist')
+        .send({ userId: userId, itemId: itemId, itemType: 'Movie' });
+      expect(response.status).toBe(201);
+      expect(response.body.message).toBe('Item added to list');
+
+      const response2 = await request(app)
+        .post('/api/mylist')
+        .send({ userId: userId, itemId: itemId, itemType: 'Movie' });
+      expect(response2.status).toBe(500);
+      expect(response2.body.message).toBe('Item already in list');
+    });
+
+    it('should return error if itemId is not valid UUID', async () => {
+      const itemId = "not a valid uuid";
+  
+      const response = await request(app)
+        .post('/api/mylist')
+        .send({ userId: userId, itemId: itemId, itemType: 'Movie' });
+      expect(response.status).toBe(500);
+      expect(response.body.message).toBe("\"itemId\" must be a valid GUID");
+    });
+
   });
 
-  it('should remove an item from the list', async () => {
-    const itemId = faker.string.uuid();
+  describe('Remove Item from List', () => {
+    it('should remove an item from the list', async () => {
+      const itemId = faker.string.uuid();
+  
+      const addResponse = await request(app)
+        .post('/api/mylist')
+        .send({ userId: userId, itemId: itemId, itemType: 'Movie' });
+      expect(addResponse.status).toBe(201);
+      expect(addResponse.body.message).toBe('Item added to list');
+  
+      
+      const removeResponse = await request(app)
+        .delete('/api/mylist')
+        .send({ userId: userId, itemId: itemId });
+      expect(removeResponse.status).toBe(200);
+      expect(removeResponse.body.message).toBe('Item removed from list');
+    });
 
-    const addResponse = await request(app)
-      .post('/api/mylist')
-      .send({ userId: userId, itemId: itemId, itemType: 'Movie' });
-    expect(addResponse.status).toBe(201);
-    expect(addResponse.body.message).toBe('Item added to list');
+    it('should return error if itemId is not valid UUID', async () => {
+      const itemId = "not a valid uuid";
+  
+      const response = await request(app)
+        .delete('/api/mylist')
+        .send({ userId: userId, itemId: itemId });
+      expect(response.status).toBe(500);
+      expect(response.body.message).toBe("\"itemId\" must be a valid GUID");
+    });
 
-    
-    const removeResponse = await request(app)
-      .delete('/api/mylist')
-      .send({ userId: userId, itemId: itemId });
-    expect(removeResponse.status).toBe(200);
-    expect(removeResponse.body.message).toBe('Item removed from list');
+    // TODO: Add more test cases later
+  
   });
 
-  it('should list items', async () => {
-    let itemId = faker.string.uuid();
-    let addResponse = await request(app)
-      .post('/api/mylist')
-      .send({ userId: userId, itemId: itemId, itemType: 'Movie' });
-    expect(addResponse.status).toBe(201);
-    expect(addResponse.body.message).toBe('Item added to list');
+  
+  describe('Get My List', () => {
 
-    itemId = faker.string.uuid();
-    addResponse = await request(app)
-      .post('/api/mylist')
-      .send({ userId: userId, itemId: itemId, itemType: 'Movie' });
-    expect(addResponse.status).toBe(201);
-    expect(addResponse.body.message).toBe('Item added to list');
+    it('should list items', async () => {
+      let itemId = faker.string.uuid();
+      let addResponse = await request(app)
+        .post('/api/mylist')
+        .send({ userId: userId, itemId: itemId, itemType: 'Movie' });
+      expect(addResponse.status).toBe(201);
+      expect(addResponse.body.message).toBe('Item added to list');
 
-    const response = await request(app)
-      .get('/api/mylist')
-      .query({ userId: userId, page: 1, limit: 10 });
-    expect(response.status).toBe(200);
-    expect(response.body.items).toBeDefined();
-    expect(response.body.pagination).toBeDefined();
+      itemId = faker.string.uuid();
+      addResponse = await request(app)
+        .post('/api/mylist')
+        .send({ userId: userId, itemId: itemId, itemType: 'Movie' });
+      expect(addResponse.status).toBe(201);
+      expect(addResponse.body.message).toBe('Item added to list');
+
+      const response = await request(app)
+        .get('/api/mylist')
+        .query({ userId: userId, page: 1, limit: 10 });
+      expect(response.status).toBe(200);
+      expect(response.body.items).toBeDefined();
+      expect(response.body.pagination).toBeDefined();
+    });
   });
+
+  // TODO: Add more test cases later
+  
 });
