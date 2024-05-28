@@ -214,6 +214,8 @@ C -- Build and deploy --> D{Render Cloud}
 - [x] Write Unit test cases
 - [x] Validate request body: Using Joi
 - [x] Generate random values: using Faker
+- [x] CI/CD
+- [x] Deploy on any cloud service
 
 ## What can be improved?
 
