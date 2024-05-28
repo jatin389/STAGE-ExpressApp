@@ -97,15 +97,15 @@ User: {
 ```
 
 ✅ `PROS`:
-✔️ Faster: No need to make extra call to fetch myList data.
-✔️ Mylist information can be fetched initially from /api/me and save in local cache
-✔️ Scalable: Any additional metadata can be added
+- ✔️ Faster: No need to make extra call to fetch myList data.
+- ✔️ Mylist information can be fetched initially from /api/me and save in local cache
+- ✔️ Scalable: Any additional metadata can be added
 
 
 🚨 `CONS`:
-❗Tight Coupling: Dependency on User Schema
-❗Not preferable for microservice arcitechure
-❗UserService and MyList Service can not scale independently
+- ❗Tight Coupling: Dependency on User Schema
+- ❗Not preferable for microservice arcitechure
+- ❗UserService and MyList Service can not scale independently
 
 
 
@@ -130,13 +130,13 @@ myList: {
 }
 ```
 ✅ `PROS`:
-✔️ ListItems can be handled separately for all users
-✔️ Addition and removal of new record is faster
-✔️ Mongo Can filter or sort on the `dateAddedOn` field easily
+- ✔️ ListItems can be handled separately for all users
+- ✔️ Addition and removal of new record is faster
+- ✔️ Mongo Can filter or sort on the `dateAddedOn` field easily
 
 🚨 `CONS`:
-❗ Need to touch multiple documents to fetch myList of single user.
-❗ Slower GET request
+- ❗ Need to touch multiple documents to fetch myList of single user.
+- ❗ Slower GET request
 
 **== 2.2 ==**
 ```json
@@ -158,13 +158,13 @@ myList: {
 ```
 
 ✅ `PROS`:
-✔️ List of items for a single user can be fetched from a single document
-✔️ Faster GET request
-✔️ FutureProof / Scalable: Can add user's metadata to this schema
+- ✔️ List of items for a single user can be fetched from a single document
+- ✔️ Faster GET request
+- ✔️ FutureProof / Scalable: Can add user's metadata to this schema
 
 🚨 `CONS`:
-❗ Nested Array of objects difficult to handle(filter / sort) in Mongo.
-❗ Removal of item from list is slower
+- ❗ Nested Array of objects difficult to handle(filter / sort) in Mongo.
+- ❗ Removal of item from list is slower
 
 #### Design Decision
 
