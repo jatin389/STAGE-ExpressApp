@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const myListController_1 = require("../controllers/myListController");
+const router = (0, express_1.Router)();
+const myListController = new myListController_1.MyListController();
+router.post('/mylist', myListController.addToList);
+router.delete('/mylist', myListController.removeFromList);
+router.get('/mylist', myListController.listItems);
+exports.default = router;
