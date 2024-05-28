@@ -15,7 +15,7 @@ interface IUser extends Document {
   myList: {
     itemId: string;
     itemType: string;
-    // dateAddedOn: Date;
+    dateAddedOn: Date;
   }[];
 }
 
@@ -37,7 +37,7 @@ const UserSchema = new Schema({
     {
       itemId: { type: String, required: true },
       itemType: { type: String, required: true },
-      // dateAddedOn: { type: Date, default: Date.now }
+      dateAddedOn: { type: Date, default: Date.now }
     }
   ]
 });

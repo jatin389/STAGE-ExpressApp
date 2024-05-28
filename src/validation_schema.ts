@@ -25,7 +25,7 @@ export const AddUserSchema = Joi.object({
 export const AddMyListSchema = Joi.object({
     userId: Joi.string().guid().required(),
     itemId: Joi.string().guid().required(),
-    itemType: Joi.string().valid('movie', 'tvshow').required()
+    itemType: Joi.string().valid('Movie' , 'TVShow').required()
 });
 
 export const RemoveFromListSchema = Joi.object({

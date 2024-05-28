@@ -4,9 +4,7 @@ import { TVShow } from '../models/tvshow';
 
 export class MyListService {
   public async addToList(userId: string, itemId: string, itemType: 'Movie' | 'TVShow') {
-    console.log("hii", userId)
     const user = await User.findOne({ id: userId });
-    console.log(user)
     if (!user) {
       throw new Error('User not found');
     }
@@ -15,7 +13,7 @@ export class MyListService {
       throw new Error('Item already in list');
     }
 
-    user.myList.push({ itemId, itemType });
+    user.myList.push({ itemId, itemType, dateAddedOn: new Date() });
     await user.save();
   }
 
