@@ -181,14 +181,34 @@ myList: {
 
 ```mermaid
 sequenceDiagram
-Alice ->> Bob: Hello Bob, how are you?
-Bob-->>John: How about you John?
-Bob--x Alice: I am good thanks!
-Bob-x John: I am good thanks!
-Note right of John: Bob thinks a long<br/>long time, so long<br/>that the text does<br/>not fit on a row.
+    participant Client
+    participant BE
+    participant Mongo
 
-Bob-->Alice: Checking with John...
-Alice->John: Yes... John, how are you?
+    Note over Client,Mongo: Add to my list
+    autonumber 1
+
+    Client ->> BE: POST /api/myList/ {userId, ItemId, ...}
+    BE -->> BE: Validates request
+    BE -->> Mongo: Fetch User by userId
+    BE -->> BE: add item to list if ItemId not in list
+    BE ->> Client: Success (201)
+
+    Note over Client,Mongo: Remove Item from list
+    autonumber 1
+
+    Client ->> BE: DELETE /api/myList/ {userId, ItemId}
+    BE -->> BE: Validates request
+    BE -->> Mongo: Fetch User by userId
+    BE -->> BE: remove item from the list if ItemId is present in list
+    BE ->> Client: Success (201)
+
+    Note over Client,Mongo: List My Items
+    autonumber 1
+
+    Client ->> BE: GET /api/myList?userid:123
+    BE -->> Mongo: Fetch User by userId
+    BE ->> Client: Success (201), return MyList
 ```
 
 ---
