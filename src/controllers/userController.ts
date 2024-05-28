@@ -12,7 +12,6 @@ export class UserController {
 
   public createUser = async (req: Request, res: Response) => {
     try {
-
       await AddUserSchema.validateAsync(req.body);
 
       const user = await this.userService.createUser(req.body);

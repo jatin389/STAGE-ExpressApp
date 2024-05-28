@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { MyListService } from '../services/myListService';
+import { AddMyListSchema, RemoveFromListSchema } from '../validation_schema';
 
 export class MyListController {
   private myListService: MyListService;
@@ -10,6 +11,8 @@ export class MyListController {
 
   public addToList = async (req: Request, res: Response) => {
     try {
+      await AddMyListSchema.validateAsync(req.body);
+
       const { userId, itemId, itemType } = req.body;
       await this.myListService.addToList(userId, itemId, itemType);
       res.status(201).json({ message: 'Item added to list' });
@@ -20,6 +23,8 @@ export class MyListController {
 
   public removeFromList = async (req: Request, res: Response) => {
     try {
+      await RemoveFromListSchema.validateAsync(req.body);
+
       const { userId, itemId } = req.body;
       await this.myListService.removeFromList(userId, itemId);
       res.status(200).json({ message: 'Item removed from list' });

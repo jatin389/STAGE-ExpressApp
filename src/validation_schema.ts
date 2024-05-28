@@ -22,6 +22,17 @@ export const AddUserSchema = Joi.object({
   }).unknown(true).options({ abortEarly: false });
 
 
+export const AddMyListSchema = Joi.object({
+    userId: Joi.string().guid().required(),
+    itemId: Joi.string().guid().required(),
+    itemType: Joi.string().valid('movie', 'tvshow').required()
+});
+
+export const RemoveFromListSchema = Joi.object({
+    userId: Joi.string().guid().required(),
+    itemId: Joi.string().guid().required(),
+});
+
 
 // export const AddToListSchema = Joi.object({
 // id: Joi.string().required(),
