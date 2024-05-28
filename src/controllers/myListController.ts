@@ -28,8 +28,8 @@ export class MyListController {
       const { userId, itemId } = req.body;
       await this.myListService.removeFromList(userId, itemId);
       res.status(200).json({ message: 'Item removed from list' });
-    } catch (error) {
-      res.status(500).json({ message: "error.message" });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
     }
   };
 
